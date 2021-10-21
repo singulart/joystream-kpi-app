@@ -190,7 +190,7 @@ export const KpiRoundUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 type="text"
               />
               <ValidatedField label="Number Of Kpis" id="kpi-round-numberOfKpis" name="numberOfKpis" data-cy="numberOfKpis" type="text" />
-              <ValidatedField label="Notes" id="kpi-round-notes" name="notes" data-cy="notes" type="text" />
+              <ValidatedField label="Notes" id="kpi-round-notes" name="notes" data-cy="notes" type="textarea" rows={10} />
               <Button tag={Link} id="cancel-save" data-cy="entityCreateCancelButton" to="/kpi-round" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
