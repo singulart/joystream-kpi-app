@@ -1,5 +1,6 @@
 package org.joystream.kpi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -68,6 +69,7 @@ public class Kpi implements Serializable {
     private String grading;
 
     @ManyToOne
+    @JsonIgnoreProperties(value = { "kpis" }, allowSetters = true)
     private KpiRound kpiRound;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

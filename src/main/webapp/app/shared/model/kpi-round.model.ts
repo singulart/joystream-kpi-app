@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { IKpi } from 'app/shared/model/kpi.model';
 
 export interface IKpiRound {
   id?: number;
@@ -16,6 +17,7 @@ export interface IKpiRound {
   maxFiatPoolDifference?: string | null;
   numberOfKpis?: string | null;
   notes?: string | null;
+  kpis?: IKpi[] | null;
 }
 
 export const defaultValue: Readonly<IKpiRound> = {};

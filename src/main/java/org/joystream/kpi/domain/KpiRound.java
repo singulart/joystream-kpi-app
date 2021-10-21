@@ -1,7 +1,10 @@
 package org.joystream.kpi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -80,6 +83,11 @@ public class KpiRound implements Serializable {
 
     @Column(name = "notes")
     private String notes;
+
+    @OneToMany(mappedBy = "kpiRound")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "kpiRound" }, allowSetters = true)
+    private Set<Kpi> kpis = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -276,6 +284,37 @@ public class KpiRound implements Serializable {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public Set<Kpi> getKpis() {
+        return this.kpis;
+    }
+
+    public void setKpis(Set<Kpi> kpis) {
+        if (this.kpis != null) {
+            this.kpis.forEach(i -> i.setKpiRound(null));
+        }
+        if (kpis != null) {
+            kpis.forEach(i -> i.setKpiRound(this));
+        }
+        this.kpis = kpis;
+    }
+
+    public KpiRound kpis(Set<Kpi> kpis) {
+        this.setKpis(kpis);
+        return this;
+    }
+
+    public KpiRound addKpis(Kpi kpi) {
+        this.kpis.add(kpi);
+        kpi.setKpiRound(this);
+        return this;
+    }
+
+    public KpiRound removeKpis(Kpi kpi) {
+        this.kpis.remove(kpi);
+        kpi.setKpiRound(null);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

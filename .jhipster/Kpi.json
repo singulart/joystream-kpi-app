@@ -72,7 +72,8 @@
       "otherEntityField": "displayName"
     }
   ],
-  "service": "no",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "Kpi",

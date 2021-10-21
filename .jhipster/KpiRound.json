@@ -61,15 +61,18 @@
     },
     {
       "fieldName": "summarySubmissionDeadline",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRulesMaxlength": "64"
     },
     {
       "fieldName": "maxFiatPoolDifference",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRulesMaxlength": "64"
     },
     {
       "fieldName": "numberOfKpis",
-      "fieldType": "String"
+      "fieldType": "String",
+      "fieldValidateRulesMaxlength": "64"
     },
     {
       "fieldName": "notes",
@@ -77,8 +80,16 @@
       "fieldValidateRulesMaxlength": "2048"
     }
   ],
-  "relationships": [],
-  "service": "no",
+  "relationships": [
+    {
+      "relationshipName": "kpis",
+      "otherEntityName": "kpi",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "kpiRound"
+    }
+  ],
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
   "readOnly": false,
   "pagination": "infinite-scroll",
   "name": "KpiRound",

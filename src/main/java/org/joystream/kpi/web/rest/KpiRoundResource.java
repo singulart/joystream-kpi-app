@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.joystream.kpi.domain.KpiRound;
 import org.joystream.kpi.repository.KpiRoundRepository;
+import org.joystream.kpi.service.KpiRoundQueryService;
+import org.joystream.kpi.service.KpiRoundService;
+import org.joystream.kpi.service.criteria.KpiRoundCriteria;
 import org.joystream.kpi.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -30,7 +32,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class KpiRoundResource {
 
     private final Logger log = LoggerFactory.getLogger(KpiRoundResource.class);
@@ -40,10 +41,20 @@ public class KpiRoundResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final KpiRoundService kpiRoundService;
+
     private final KpiRoundRepository kpiRoundRepository;
 
-    public KpiRoundResource(KpiRoundRepository kpiRoundRepository) {
+    private final KpiRoundQueryService kpiRoundQueryService;
+
+    public KpiRoundResource(
+        KpiRoundService kpiRoundService,
+        KpiRoundRepository kpiRoundRepository,
+        KpiRoundQueryService kpiRoundQueryService
+    ) {
+        this.kpiRoundService = kpiRoundService;
         this.kpiRoundRepository = kpiRoundRepository;
+        this.kpiRoundQueryService = kpiRoundQueryService;
     }
 
     /**
@@ -59,7 +70,7 @@ public class KpiRoundResource {
         if (kpiRound.getId() != null) {
             throw new BadRequestAlertException("A new kpiRound cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        KpiRound result = kpiRoundRepository.save(kpiRound);
+        KpiRound result = kpiRoundService.save(kpiRound);
         return ResponseEntity
             .created(new URI("/api/kpi-rounds/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -93,7 +104,7 @@ public class KpiRoundResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        KpiRound result = kpiRoundRepository.save(kpiRound);
+        KpiRound result = kpiRoundService.save(kpiRound);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, kpiRound.getId().toString()))
@@ -128,55 +139,7 @@ public class KpiRoundResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<KpiRound> result = kpiRoundRepository
-            .findById(kpiRound.getId())
-            .map(existingKpiRound -> {
-                if (kpiRound.getDisplayName() != null) {
-                    existingKpiRound.setDisplayName(kpiRound.getDisplayName());
-                }
-                if (kpiRound.getTotalPossibleRewards() != null) {
-                    existingKpiRound.setTotalPossibleRewards(kpiRound.getTotalPossibleRewards());
-                }
-                if (kpiRound.getCouncilElectedInRound() != null) {
-                    existingKpiRound.setCouncilElectedInRound(kpiRound.getCouncilElectedInRound());
-                }
-                if (kpiRound.getCouncilMembers() != null) {
-                    existingKpiRound.setCouncilMembers(kpiRound.getCouncilMembers());
-                }
-                if (kpiRound.getTermLength() != null) {
-                    existingKpiRound.setTermLength(kpiRound.getTermLength());
-                }
-                if (kpiRound.getStartBlock() != null) {
-                    existingKpiRound.setStartBlock(kpiRound.getStartBlock());
-                }
-                if (kpiRound.getStartDate() != null) {
-                    existingKpiRound.setStartDate(kpiRound.getStartDate());
-                }
-                if (kpiRound.getEndBlock() != null) {
-                    existingKpiRound.setEndBlock(kpiRound.getEndBlock());
-                }
-                if (kpiRound.getEndDate() != null) {
-                    existingKpiRound.setEndDate(kpiRound.getEndDate());
-                }
-                if (kpiRound.getTermSummary() != null) {
-                    existingKpiRound.setTermSummary(kpiRound.getTermSummary());
-                }
-                if (kpiRound.getSummarySubmissionDeadline() != null) {
-                    existingKpiRound.setSummarySubmissionDeadline(kpiRound.getSummarySubmissionDeadline());
-                }
-                if (kpiRound.getMaxFiatPoolDifference() != null) {
-                    existingKpiRound.setMaxFiatPoolDifference(kpiRound.getMaxFiatPoolDifference());
-                }
-                if (kpiRound.getNumberOfKpis() != null) {
-                    existingKpiRound.setNumberOfKpis(kpiRound.getNumberOfKpis());
-                }
-                if (kpiRound.getNotes() != null) {
-                    existingKpiRound.setNotes(kpiRound.getNotes());
-                }
-
-                return existingKpiRound;
-            })
-            .map(kpiRoundRepository::save);
+        Optional<KpiRound> result = kpiRoundService.partialUpdate(kpiRound);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -188,14 +151,27 @@ public class KpiRoundResource {
      * {@code GET  /kpi-rounds} : get all the kpiRounds.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of kpiRounds in body.
      */
     @GetMapping("/kpi-rounds")
-    public ResponseEntity<List<KpiRound>> getAllKpiRounds(Pageable pageable) {
-        log.debug("REST request to get a page of KpiRounds");
-        Page<KpiRound> page = kpiRoundRepository.findAll(pageable);
+    public ResponseEntity<List<KpiRound>> getAllKpiRounds(KpiRoundCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get KpiRounds by criteria: {}", criteria);
+        Page<KpiRound> page = kpiRoundQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /kpi-rounds/count} : count all the kpiRounds.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/kpi-rounds/count")
+    public ResponseEntity<Long> countKpiRounds(KpiRoundCriteria criteria) {
+        log.debug("REST request to count KpiRounds by criteria: {}", criteria);
+        return ResponseEntity.ok().body(kpiRoundQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -207,7 +183,7 @@ public class KpiRoundResource {
     @GetMapping("/kpi-rounds/{id}")
     public ResponseEntity<KpiRound> getKpiRound(@PathVariable Long id) {
         log.debug("REST request to get KpiRound : {}", id);
-        Optional<KpiRound> kpiRound = kpiRoundRepository.findById(id);
+        Optional<KpiRound> kpiRound = kpiRoundService.findOne(id);
         return ResponseUtil.wrapOrNotFound(kpiRound);
     }
 
@@ -220,7 +196,7 @@ public class KpiRoundResource {
     @DeleteMapping("/kpi-rounds/{id}")
     public ResponseEntity<Void> deleteKpiRound(@PathVariable Long id) {
         log.debug("REST request to delete KpiRound : {}", id);
-        kpiRoundRepository.deleteById(id);
+        kpiRoundService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

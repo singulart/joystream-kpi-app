@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.joystream.kpi.domain.Kpi;
 import org.joystream.kpi.repository.KpiRepository;
+import org.joystream.kpi.service.KpiQueryService;
+import org.joystream.kpi.service.KpiService;
+import org.joystream.kpi.service.criteria.KpiCriteria;
 import org.joystream.kpi.web.rest.errors.BadRequestAlertException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -30,7 +32,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class KpiResource {
 
     private final Logger log = LoggerFactory.getLogger(KpiResource.class);
@@ -40,10 +41,16 @@ public class KpiResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final KpiService kpiService;
+
     private final KpiRepository kpiRepository;
 
-    public KpiResource(KpiRepository kpiRepository) {
+    private final KpiQueryService kpiQueryService;
+
+    public KpiResource(KpiService kpiService, KpiRepository kpiRepository, KpiQueryService kpiQueryService) {
+        this.kpiService = kpiService;
         this.kpiRepository = kpiRepository;
+        this.kpiQueryService = kpiQueryService;
     }
 
     /**
@@ -59,7 +66,7 @@ public class KpiResource {
         if (kpi.getId() != null) {
             throw new BadRequestAlertException("A new kpi cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Kpi result = kpiRepository.save(kpi);
+        Kpi result = kpiService.save(kpi);
         return ResponseEntity
             .created(new URI("/api/kpis/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -91,7 +98,7 @@ public class KpiResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Kpi result = kpiRepository.save(kpi);
+        Kpi result = kpiService.save(kpi);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, kpi.getId().toString()))
@@ -124,46 +131,7 @@ public class KpiResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Kpi> result = kpiRepository
-            .findById(kpi.getId())
-            .map(existingKpi -> {
-                if (kpi.getTitle() != null) {
-                    existingKpi.setTitle(kpi.getTitle());
-                }
-                if (kpi.getReward() != null) {
-                    existingKpi.setReward(kpi.getReward());
-                }
-                if (kpi.getRewardDistribution() != null) {
-                    existingKpi.setRewardDistribution(kpi.getRewardDistribution());
-                }
-                if (kpi.getGradingProcess() != null) {
-                    existingKpi.setGradingProcess(kpi.getGradingProcess());
-                }
-                if (kpi.getActive() != null) {
-                    existingKpi.setActive(kpi.getActive());
-                }
-                if (kpi.getPurpose() != null) {
-                    existingKpi.setPurpose(kpi.getPurpose());
-                }
-                if (kpi.getScopeOfWork() != null) {
-                    existingKpi.setScopeOfWork(kpi.getScopeOfWork());
-                }
-                if (kpi.getRewardDistributionInfo() != null) {
-                    existingKpi.setRewardDistributionInfo(kpi.getRewardDistributionInfo());
-                }
-                if (kpi.getReporting() != null) {
-                    existingKpi.setReporting(kpi.getReporting());
-                }
-                if (kpi.getFiatPoolFactor() != null) {
-                    existingKpi.setFiatPoolFactor(kpi.getFiatPoolFactor());
-                }
-                if (kpi.getGrading() != null) {
-                    existingKpi.setGrading(kpi.getGrading());
-                }
-
-                return existingKpi;
-            })
-            .map(kpiRepository::save);
+        Optional<Kpi> result = kpiService.partialUpdate(kpi);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -175,14 +143,27 @@ public class KpiResource {
      * {@code GET  /kpis} : get all the kpis.
      *
      * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of kpis in body.
      */
     @GetMapping("/kpis")
-    public ResponseEntity<List<Kpi>> getAllKpis(Pageable pageable) {
-        log.debug("REST request to get a page of Kpis");
-        Page<Kpi> page = kpiRepository.findAll(pageable);
+    public ResponseEntity<List<Kpi>> getAllKpis(KpiCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get Kpis by criteria: {}", criteria);
+        Page<Kpi> page = kpiQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /kpis/count} : count all the kpis.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/kpis/count")
+    public ResponseEntity<Long> countKpis(KpiCriteria criteria) {
+        log.debug("REST request to count Kpis by criteria: {}", criteria);
+        return ResponseEntity.ok().body(kpiQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -194,7 +175,7 @@ public class KpiResource {
     @GetMapping("/kpis/{id}")
     public ResponseEntity<Kpi> getKpi(@PathVariable Long id) {
         log.debug("REST request to get Kpi : {}", id);
-        Optional<Kpi> kpi = kpiRepository.findById(id);
+        Optional<Kpi> kpi = kpiService.findOne(id);
         return ResponseUtil.wrapOrNotFound(kpi);
     }
 
@@ -207,7 +188,7 @@ public class KpiResource {
     @DeleteMapping("/kpis/{id}")
     public ResponseEntity<Void> deleteKpi(@PathVariable Long id) {
         log.debug("REST request to delete Kpi : {}", id);
-        kpiRepository.deleteById(id);
+        kpiService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

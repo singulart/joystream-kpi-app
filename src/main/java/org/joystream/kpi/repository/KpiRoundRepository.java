@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface KpiRoundRepository extends JpaRepository<KpiRound, Long> {}
+public interface KpiRoundRepository extends JpaRepository<KpiRound, Long>, JpaSpecificationExecutor<KpiRound> {}

@@ -50,6 +50,7 @@ public class CacheConfiguration {
             createCache(cm, org.joystream.kpi.domain.User.class.getName() + ".authorities");
             createCache(cm, org.joystream.kpi.domain.KpiRound.class.getName());
             createCache(cm, org.joystream.kpi.domain.Kpi.class.getName());
+            createCache(cm, org.joystream.kpi.domain.KpiRound.class.getName() + ".kpis");
             // jhipster-needle-ehcache-add-entry
         };
     }
