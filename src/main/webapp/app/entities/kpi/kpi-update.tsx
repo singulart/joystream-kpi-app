@@ -137,20 +137,22 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 id="kpi-purpose"
                 name="purpose"
                 data-cy="purpose"
-                type="text"
+                type="textarea"
                 validate={{
                   maxLength: { value: 2048, message: 'This field cannot be longer than 2048 characters.' },
                 }}
+                rows={10}
               />
               <ValidatedField
                 label="Scope Of Work"
                 id="kpi-scopeOfWork"
                 name="scopeOfWork"
                 data-cy="scopeOfWork"
-                type="text"
+                type="textarea"
                 validate={{
                   maxLength: { value: 2048, message: 'This field cannot be longer than 2048 characters.' },
                 }}
+                rows={10}
               />
               <ValidatedField
                 label="Reward Distribution Info"
@@ -167,10 +169,11 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 id="kpi-reporting"
                 name="reporting"
                 data-cy="reporting"
-                type="text"
+                type="textarea"
                 validate={{
                   maxLength: { value: 2048, message: 'This field cannot be longer than 2048 characters.' },
                 }}
+                rows={10}
               />
               <ValidatedField label="Fiat Pool Factor" id="kpi-fiatPoolFactor" name="fiatPoolFactor" data-cy="fiatPoolFactor" type="text" />
               <ValidatedField
@@ -178,10 +181,11 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 id="kpi-grading"
                 name="grading"
                 data-cy="grading"
-                type="text"
+                type="textarea"
                 validate={{
                   maxLength: { value: 2048, message: 'This field cannot be longer than 2048 characters.' },
                 }}
+                rows={10}
               />
               <ValidatedField id="kpi-kpiRound" name="kpiRound" data-cy="kpiRound" label="Kpi Round" type="select">
                 <option value="" key="0" />
