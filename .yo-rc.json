@@ -43,7 +43,7 @@
     "clientPackageManager": "npm",
     "enableGradleEnterprise": false,
     "languages": ["en", "fr"],
-    "lastLiquibaseTimestamp": 1634820815000,
-    "entities": ["KpiRound"]
+    "lastLiquibaseTimestamp": 1634822911000,
+    "entities": ["KpiRound", "Kpi"]
   }
 }
