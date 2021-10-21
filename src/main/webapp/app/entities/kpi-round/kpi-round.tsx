@@ -126,44 +126,17 @@ export const KpiRound = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('displayName')}>
                     Display Name <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={sort('numberOfKpis')}>
+                    Number Of Kpis <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th className="hand" onClick={sort('totalPossibleRewards')}>
                     Total Possible Rewards <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('councilElectedInRound')}>
-                    Council Elected In Round <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('councilMembers')}>
-                    Council Members <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('termLength')}>
-                    Term Length <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('startBlock')}>
-                    Start Block <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('startDate')}>
-                    Start Date <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('endBlock')}>
-                    End Block <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('endDate')}>
-                    End Date <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('termSummary')}>
-                    Term Summary <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('summarySubmissionDeadline')}>
                     Summary Submission Deadline <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('maxFiatPoolDifference')}>
                     Max Fiat Pool Difference <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('numberOfKpis')}>
-                    Number Of Kpis <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('notes')}>
-                    Notes <FontAwesomeIcon icon="sort" />
                   </th>
                   <th />
                 </tr>
@@ -177,21 +150,10 @@ export const KpiRound = (props: RouteComponentProps<{ url: string }>) => {
                       </Button>
                     </td>
                     <td>{kpiRound.displayName}</td>
+                    <td>{kpiRound.numberOfKpis}</td>
                     <td>{kpiRound.totalPossibleRewards}</td>
-                    <td>{kpiRound.councilElectedInRound}</td>
-                    <td>{kpiRound.councilMembers}</td>
-                    <td>{kpiRound.termLength}</td>
-                    <td>{kpiRound.startBlock}</td>
-                    <td>
-                      {kpiRound.startDate ? <TextFormat type="date" value={kpiRound.startDate} format={APP_LOCAL_DATE_FORMAT} /> : null}
-                    </td>
-                    <td>{kpiRound.endBlock}</td>
-                    <td>{kpiRound.endDate ? <TextFormat type="date" value={kpiRound.endDate} format={APP_LOCAL_DATE_FORMAT} /> : null}</td>
-                    <td>{kpiRound.termSummary}</td>
                     <td>{kpiRound.summarySubmissionDeadline}</td>
                     <td>{kpiRound.maxFiatPoolDifference}</td>
-                    <td>{kpiRound.numberOfKpis}</td>
-                    <td>{kpiRound.notes}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
                         <Button tag={Link} to={`${match.url}/${kpiRound.id}`} color="info" size="sm" data-cy="entityDetailsButton">

@@ -129,32 +129,8 @@ export const Kpi = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('reward')}>
                     Reward <FontAwesomeIcon icon="sort" />
                   </th>
-                  <th className="hand" onClick={sort('rewardDistribution')}>
-                    Reward Distribution <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('gradingProcess')}>
-                    Grading Process <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('active')}>
-                    Active <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('purpose')}>
-                    Purpose <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('scopeOfWork')}>
-                    Scope Of Work <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('rewardDistributionInfo')}>
-                    Reward Distribution Info <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('reporting')}>
-                    Reporting <FontAwesomeIcon icon="sort" />
-                  </th>
                   <th className="hand" onClick={sort('fiatPoolFactor')}>
                     Fiat Pool Factor <FontAwesomeIcon icon="sort" />
-                  </th>
-                  <th className="hand" onClick={sort('grading')}>
-                    Grading <FontAwesomeIcon icon="sort" />
                   </th>
                   <th>
                     Kpi Round <FontAwesomeIcon icon="sort" />
@@ -172,15 +148,8 @@ export const Kpi = (props: RouteComponentProps<{ url: string }>) => {
                     </td>
                     <td>{kpi.title}</td>
                     <td>{kpi.reward}</td>
-                    <td>{kpi.rewardDistribution}</td>
                     <td>{kpi.gradingProcess}</td>
-                    <td>{kpi.active}</td>
-                    <td>{kpi.purpose}</td>
-                    <td>{kpi.scopeOfWork}</td>
-                    <td>{kpi.rewardDistributionInfo}</td>
-                    <td>{kpi.reporting}</td>
                     <td>{kpi.fiatPoolFactor}</td>
-                    <td>{kpi.grading}</td>
                     <td>{kpi.kpiRound ? <Link to={`kpi-round/${kpi.kpiRound.id}`}>{kpi.kpiRound.displayName}</Link> : ''}</td>
                     <td className="text-right">
                       <div className="btn-group flex-btn-group-container">
