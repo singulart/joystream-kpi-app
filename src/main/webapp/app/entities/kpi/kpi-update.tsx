@@ -67,7 +67,7 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
       <Row className="justify-content-center">
         <Col md="8">
           <h2 id="joystreamKpiApp.kpi.home.createOrEditLabel" data-cy="KpiCreateUpdateHeading">
-            Create or edit a Kpi
+            Create or edit a KPI
           </h2>
         </Col>
       </Row>
@@ -159,10 +159,11 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 id="kpi-rewardDistributionInfo"
                 name="rewardDistributionInfo"
                 data-cy="rewardDistributionInfo"
-                type="text"
+                type="textarea"
                 validate={{
                   maxLength: { value: 2048, message: 'This field cannot be longer than 2048 characters.' },
                 }}
+                rows={10}
               />
               <ValidatedField
                 label="Reporting"

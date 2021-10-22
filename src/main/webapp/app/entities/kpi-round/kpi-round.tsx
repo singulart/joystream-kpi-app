@@ -96,14 +96,14 @@ export const KpiRound = (props: RouteComponentProps<{ url: string }>) => {
   return (
     <div>
       <h2 id="kpi-round-heading" data-cy="KpiRoundHeading">
-        Kpi Rounds
+        KPI Rounds
         <div className="d-flex justify-content-end">
           <Button className="mr-2" color="info" onClick={handleSyncList} disabled={loading}>
             <FontAwesomeIcon icon="sync" spin={loading} /> Refresh List
           </Button>
           <Link to={`${match.url}/new`} className="btn btn-primary jh-create-entity" id="jh-create-entity" data-cy="entityCreateButton">
             <FontAwesomeIcon icon="plus" />
-            &nbsp; Create new Kpi Round
+            &nbsp; Create new KPI Round
           </Link>
         </div>
       </h2>
@@ -127,7 +127,7 @@ export const KpiRound = (props: RouteComponentProps<{ url: string }>) => {
                     Display Name <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('numberOfKpis')}>
-                    Number Of Kpis <FontAwesomeIcon icon="sort" />
+                    Number Of KPIs <FontAwesomeIcon icon="sort" />
                   </th>
                   <th className="hand" onClick={sort('totalPossibleRewards')}>
                     Total Possible Rewards <FontAwesomeIcon icon="sort" />
