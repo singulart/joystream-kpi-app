@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getEntity } from './kpi-round.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import ReactMarkdown from 'react-markdown';
 
 export const KpiRoundDetail = (props: RouteComponentProps<{ id: string }>) => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ export const KpiRoundDetail = (props: RouteComponentProps<{ id: string }>) => {
   return (
     <Row>
       <Col md="8">
-        <h2 data-cy="kpiRoundDetailsHeading">KpiRound</h2>
+        <h2 data-cy="kpiRoundDetailsHeading">KPI Round</h2>
         <dl className="jh-entity-details">
           <dt>
             <span id="id">ID</span>
@@ -78,13 +79,15 @@ export const KpiRoundDetail = (props: RouteComponentProps<{ id: string }>) => {
           </dt>
           <dd>{kpiRoundEntity.maxFiatPoolDifference}</dd>
           <dt>
-            <span id="numberOfKpis">Number Of Kpis</span>
+            <span id="numberOfKpis">Number Of KPIs</span>
           </dt>
           <dd>{kpiRoundEntity.numberOfKpis}</dd>
           <dt>
             <span id="notes">Notes</span>
           </dt>
-          <dd>{kpiRoundEntity.notes}</dd>
+          <dd>
+            <ReactMarkdown>{kpiRoundEntity.notes}</ReactMarkdown>
+          </dd>
         </dl>
         <Button tag={Link} to="/kpi-round" replace color="info" data-cy="entityDetailsBackButton">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

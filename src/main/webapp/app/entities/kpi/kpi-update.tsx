@@ -188,7 +188,7 @@ export const KpiUpdate = (props: RouteComponentProps<{ id: string }>) => {
                 }}
                 rows={10}
               />
-              <ValidatedField id="kpi-kpiRound" name="kpiRound" data-cy="kpiRound" label="Kpi Round" type="select">
+              <ValidatedField id="kpi-kpiRound" name="kpiRound" data-cy="kpiRound" label="KPI Round" type="select">
                 <option value="" key="0" />
                 {kpiRounds
                   ? kpiRounds.map(otherEntity => (

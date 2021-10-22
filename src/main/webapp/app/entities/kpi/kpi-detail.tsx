@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getEntity } from './kpi.reducer';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
 import { useAppDispatch, useAppSelector } from 'app/config/store';
+import ReactMarkdown from 'react-markdown';
 
 export const KpiDetail = (props: RouteComponentProps<{ id: string }>) => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ export const KpiDetail = (props: RouteComponentProps<{ id: string }>) => {
   return (
     <Row>
       <Col md="8">
-        <h2 data-cy="kpiDetailsHeading">Kpi</h2>
+        <h2 data-cy="kpiDetailsHeading">KPI</h2>
         <dl className="jh-entity-details">
           <dt>
             <span id="id">ID</span>
@@ -48,15 +49,21 @@ export const KpiDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dt>
             <span id="purpose">Purpose</span>
           </dt>
-          <dd>{kpiEntity.purpose}</dd>
+          <dd>
+            <ReactMarkdown>{kpiEntity.purpose}</ReactMarkdown>
+          </dd>
           <dt>
             <span id="scopeOfWork">Scope Of Work</span>
           </dt>
-          <dd>{kpiEntity.scopeOfWork}</dd>
+          <dd>
+            <ReactMarkdown>{kpiEntity.scopeOfWork}</ReactMarkdown>
+          </dd>
           <dt>
             <span id="rewardDistributionInfo">Reward Distribution Info</span>
           </dt>
-          <dd>{kpiEntity.rewardDistributionInfo}</dd>
+          <dd>
+            <ReactMarkdown>{kpiEntity.rewardDistributionInfo}</ReactMarkdown>
+          </dd>
           <dt>
             <span id="reporting">Reporting</span>
           </dt>
@@ -68,8 +75,10 @@ export const KpiDetail = (props: RouteComponentProps<{ id: string }>) => {
           <dt>
             <span id="grading">Grading</span>
           </dt>
-          <dd>{kpiEntity.grading}</dd>
-          <dt>Kpi Round</dt>
+          <dd>
+            <ReactMarkdown>{kpiEntity.grading}</ReactMarkdown>
+          </dd>
+          <dt>KPI Round</dt>
           <dd>{kpiEntity.kpiRound ? kpiEntity.kpiRound.displayName : ''}</dd>
         </dl>
         <Button tag={Link} to="/kpi" replace color="info" data-cy="entityDetailsBackButton">
