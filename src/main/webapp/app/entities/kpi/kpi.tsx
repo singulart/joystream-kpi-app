@@ -129,6 +129,9 @@ export const Kpi = (props: RouteComponentProps<{ url: string }>) => {
                   <th className="hand" onClick={sort('reward')}>
                     Reward <FontAwesomeIcon icon="sort" />
                   </th>
+                  <th className="hand" onClick={sort('gradingProcess')}>
+                    Grading Process <FontAwesomeIcon icon="sort" />
+                  </th>
                   <th className="hand" onClick={sort('fiatPoolFactor')}>
                     Fiat Pool Factor <FontAwesomeIcon icon="sort" />
                   </th>
